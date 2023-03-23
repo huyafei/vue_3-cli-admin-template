@@ -1,30 +1,30 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <el-config-provider :locale="lang[language]" namespace="el" :size="size">
+    <router-view />
+  </el-config-provider>
 </template>
+<script>
+import { reactive, onBeforeMount, onMounted, computed } from "vue";
+import { useStore } from "vuex";
+import zh from "element-plus/lib/locale/lang/zh-cn";
+import en from "element-plus/es/locale/lang/en";
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>
+export default {
+  setup() {
+    const store = useStore();
+    const lang = reactive({
+      zh,
+      en,
+    });
+    const language = computed(() => {
+      return store.getters.language;
+    });
+    const size = computed(() => {
+      console.log(store.getters.size);
+      return store.getters.size;
+    });
+    return { lang, language, size };
+  },
+};
+</script>
+<style lang="scss"></style>
